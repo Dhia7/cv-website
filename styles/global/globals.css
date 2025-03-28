@@ -22,3 +22,24 @@ section {
   transition: all 0.3s ease;
   
 }
+
+
+
+@media (max-width: 768px) {
+  .navList {
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding: 0.5rem 1rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .navItem {
+    flex-shrink: 0;
+  }
+  
+  .navLink {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+

@@ -1,8 +1,7 @@
 // pages/index.js
+import { useScroll } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFreeCodeCamp } from '@fortawesome/free-brands-svg-icons';
 import { 
@@ -17,45 +16,58 @@ import {
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import styles from '../styles/Home.module.css';
 
+
 export default function Home() {
+  const { scrollY } = useScroll();
   const [activeSection, setActiveSection] = useState('about');
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  // Handle scroll progress
   useEffect(() => {
     const handleScroll = () => {
-      const scrollTop = window.scrollY;
+      return scrollY.onChange((latest) => {
+      // Your scroll handling logic here
+      // latest will be a value between 0 and 1
+      const scrollPosition = latest * document.body.scrollHeight;
+      // Scroll progress calculation
+      const scrollTop = latest;
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
       const totalScroll = documentHeight - windowHeight;
       const progress = (scrollTop / totalScroll) * 100;
       setScrollProgress(progress);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const handleNavClick = (sectionId, e) => {
-    e.preventDefault();
-    const targetSection = document.getElementById(sectionId);
-    if (targetSection) {
-      const offset = 100; // Adjust based on your header height
-      const targetPosition = targetSection.getBoundingClientRect().top + window.scrollY - offset;
       
-      window.scrollTo({
-        top: targetPosition,
-        behavior: 'smooth'
-      });
   
-      // Update active section after scroll completes
-      setTimeout(() => {
-        setActiveSection(sectionId);
-      }, 800); // Matches scroll duration
-    }
-  };
-
-  // Intersection Observer for section animations
+      // Active section detection
+      const sections = document.querySelectorAll(`.${styles.section}`);
+      let currentSection = '';
+      
+      sections.forEach(section => {
+        const sectionId = section.getAttribute('id');
+        const sectionOffsetTop = section.offsetTop;
+        const sectionHeight = section.offsetHeight;
+        
+        if (
+          scrollPosition  >= sectionOffsetTop - 150 && // 100px offset for early detection
+          scrollPosition  < sectionOffsetTop + sectionHeight - windowHeight / 3
+        ) {
+          currentSection = sectionId;
+        }
+        
+      });
+      
+      if (currentSection && currentSection !== activeSection) {
+        setActiveSection(currentSection);
+      }
+    });
+    };
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial call
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [activeSection, scrollY]);
+  
+  
+  // Keep your IntersectionObserver for animations only
   useEffect(() => {
     const sections = document.querySelectorAll(`.${styles.section}`);
     const observer = new IntersectionObserver(
@@ -71,17 +83,40 @@ export default function Home() {
         rootMargin: '0px 0px -100px 0px'
       }
     );
-
+  
     sections.forEach(section => {
       observer.observe(section);
     });
-
+  
     return () => {
       sections.forEach(section => {
         observer.unobserve(section);
       });
     };
   }, []);
+
+ 
+    
+  const handleNavClick = (sectionId, e) => {
+    e.preventDefault();
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+      const offset = 100;
+      const targetPosition = targetSection.getBoundingClientRect().top + window.scrollY - offset;
+      
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth'
+      });
+  
+      // Update active section immediately for better UX
+      setActiveSection(sectionId);
+    }
+  };
+
+
+
+  
 
   return (
     <div className={styles.container}>
@@ -132,7 +167,7 @@ export default function Home() {
         <span className={styles.tagline}>Full Stack Developer</span>
       </div>
       <div className={styles.heroHighlight}>
-        <p>Specializing in modern web development with</p>
+        <p>Specializing in modern web development with React, Node.js, and Next.js</p>
         <div className={styles.techStack}>
           <span className={styles.techPill}>JavaScript</span>
           <span className={styles.techPill}>TypeScript</span>
