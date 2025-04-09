@@ -11,7 +11,8 @@ import {
   faCode,
   faLanguage,
   faBriefcase,
-  faProjectDiagram
+  faProjectDiagram,
+  faLink
 } from '@fortawesome/free-solid-svg-icons';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import styles from '../styles/Home.module.css';
@@ -21,6 +22,8 @@ export default function Home() {
   const { scrollY } = useScroll();
   const [activeSection, setActiveSection] = useState('about');
   const [scrollProgress, setScrollProgress] = useState(0);
+
+  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -171,7 +174,7 @@ export default function Home() {
         <div className={styles.techStack}>
           <span className={styles.techPill}>JavaScript</span>
           <span className={styles.techPill}>TypeScript</span>
-          <span className={styles.techPill}>React</span>
+          <span className={styles.techPill}>React.js</span>
           <span className={styles.techPill}>Node.js</span>
           <span className={styles.techPill}>Next.js</span>
         </div>
@@ -231,7 +234,7 @@ export default function Home() {
               </div>
               <ul className={styles.responsibilities}>
               <li>
-                  Developed and deployed scalable web applications as a Fullstack Developer, specializing in <strong>JavaScript</strong>, <strong>backend development</strong>, <strong>Next.js</strong>, and <strong>MERN stack</strong> (MongoDB, Express.js, React, Node.js).
+                  Developed and deployed scalable web applications as a Fullstack Developer, specializing in <strong>JavaScript</strong>, <strong>backend development</strong>, <strong>Next.js</strong>, and <strong>MERN stack</strong>.
                 </li>
                 <li>
                   Built end-to-end solutions, including intuitive user interfaces, RESTful APIs, and database management for dynamic, data-driven applications.
@@ -301,7 +304,7 @@ export default function Home() {
               </div>
               <ul className={styles.responsibilities}>
                 <li>Managing Packages with NPM</li>
-                <li>Basic Node and Express</li>
+                <li>Basic Node and Express.js</li>
                 <li>MongoDB and Mongoose</li>
                 <li>Back End Development and APIs Projects</li>
               </ul>
@@ -338,7 +341,7 @@ export default function Home() {
                 <li>React/Redux</li>
                 <li>TypeScript</li>
                 <li>Next.js</li>
-                <li>Tailwind</li>
+                <li>TailwindCSS</li>
               </ul>
             </div>
 
@@ -348,18 +351,8 @@ export default function Home() {
                 <li>Node.js</li>
                 <li>MongoDB</li>
                 <li>REST APIs</li>
-                <li>PostgreSQL</li>          
+                <li>PostgreSQL</li>       
                 <li></li>
-              </ul>
-            </div>
-
-            <div className={styles.skillCategory}>
-              <h3>DevOps</h3>
-              <ul className={styles.skillList}>
-                <li>AWS</li>
-                <li>Docker</li>
-                <li>Jenkins</li>
-                <li>Kubernetes</li>
               </ul>
             </div>
           </div>
@@ -378,7 +371,7 @@ export default function Home() {
         </section>
 
         <section id="contact" className={styles.section}>
-          <h2 className={styles.sectionTitle}>Contact Information</h2>
+          <h2 className={styles.sectionTitle}> <FontAwesomeIcon icon={faLink}/> Contact</h2>
           <div className={styles.contactGrid}>
             <div className={styles.contactItem}>
               <FontAwesomeIcon icon={faLinkedin} />

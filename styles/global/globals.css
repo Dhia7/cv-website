@@ -17,10 +17,22 @@ body {
   color: var(--light-text);
 }
 
+
+
 section {
   scroll-margin-top: 100px; /* Should match your header height */
   transition: all 0.3s ease;
   
+}
+
+
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  overflow-x: hidden;
+  font-size: 16px;
+  line-height: 1.6;
 }
 
 
@@ -40,6 +52,15 @@ section {
   .navLink {
     padding: 0.5rem;
     font-size: 0.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .scrollProgressBar {
+    transition: none !important;
   }
 }
 
