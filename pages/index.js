@@ -212,17 +212,18 @@ export default function Home() {
                 <span>Sousse, TN</span>
               </div>
               <ul className={styles.responsibilities}>
-              <li>
-                  <strong>Needs Analysis:</strong> Collaborated with stakeholders to gather and analyze project requirements, defining the site's key features.
+              <li><div>
+                  <strong>Needs Analysis:</strong> Collaborated with stakeholders to gather and analyze project requirements, defining the site&apos;s key features.
+                  </div>
                 </li>
                 <li>
-                  <strong>Design and Development:</strong> Designed the site's architecture and developed functionalities using modern technologies, creating an intuitive and responsive user interface and implementing a database for dynamic content management.
+                  <strong>Design and Development:</strong> Designed the site&apos;s architecture and developed functionalities using modern technologies, creating an intuitive and responsive user interface and implementing a database for dynamic content management.
                 </li>
                 <li>
                   <strong>Testing and Optimization:</strong> Conducted rigorous testing to ensure quality and performance, optimizing code for faster loading speeds and an enhanced user experience.
                 </li>
                 <li>
-                  <strong>Deployment:</strong> Supervised the site's deployment, ensuring it was fully functional, accessible, and ready for end users.
+                  <strong>Deployment:</strong> Supervised the site&apos;s deployment, ensuring it was fully functional, accessible, and ready for end users.
                 </li>
               </ul>
             </div>
@@ -267,7 +268,7 @@ export default function Home() {
 
             <div className={styles.projectCard}>
               <h3>Technotes project</h3>
-              <p>A MernStack application built with a backend API's.</p>
+              <p>A MernStack application built with a backend API&apos;s.</p>
               <div className={styles.techStack}>
                 <span>MongoDB</span>
                 <span>Express</span>
