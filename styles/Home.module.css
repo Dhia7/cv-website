@@ -332,6 +332,42 @@
   margin-bottom: 1.5rem;
 }
 
+/* Project Title Link Styling */
+.projectTitleLink {
+  text-decoration: none;
+  color: inherit; /* Keeps the original heading color */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: color 0.3s ease;
+}
+
+.projectTitleLink:hover h3 {
+  color: #3498db; /* Changes color on hover (match your theme) */
+}
+
+.externalIcon {
+  font-size: 0.8em;
+  opacity: 0.7;
+  transition: transform 0.2s ease;
+}
+
+.projectTitleLink:hover .externalIcon {
+  transform: translate(2px, -2px);
+  opacity: 1;
+}
+
+/* Project Link Styling */
+.projectLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.linkIcon {
+  font-size: 0.8em;
+}
+
 .techStack {
   display: flex;
   flex-wrap: wrap;

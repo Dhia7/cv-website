@@ -12,7 +12,8 @@ import {
   faLanguage,
   faBriefcase,
   faProjectDiagram,
-  faLink
+  faLink,
+  faExternalLinkAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import styles from '../styles/Home.module.css';
@@ -255,7 +256,14 @@ export default function Home() {
           <h2 className={styles.sectionTitle}><FontAwesomeIcon icon={faProjectDiagram} /> Projects</h2>
           <div className={styles.projectsGrid}>
             <div className={styles.projectCard}>
-              <h3>Dashboard Platform</h3>
+              <a
+                  href="https://nextjs-dashboard-projects.vercel.app/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className={styles.projectTitleLink} // Optional: Add custom styling
+              >
+                <h3>Dashboard Platform <span className={styles.externalIcon}>↗</span></h3>
+              </a>
               <p>A full-stack Dashboard solution built with Next.js</p>
               <div className={styles.techStack}>
                 <span>React</span>
@@ -263,11 +271,25 @@ export default function Home() {
                 <span>Tailwind CSS</span>
                 <span>Vercel/postgres</span>
               </div>
-              <a href="https://github.com/Dhia7/nextjs-dashboard" target="_blank" rel="noopener noreferrer" className={styles.projectLink}>View Project</a>
-            </div>
+                <a  href="https://github.com/Dhia7/nextjs-dashboard"
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className={styles.projectLink}
+                  >
+                    View Project <FontAwesomeIcon icon={faExternalLinkAlt} className={styles.linkIcon} />
+                </a>
+              </div>
 
             <div className={styles.projectCard}>
-              <h3>Technotes project</h3>
+              <a
+                  href="https://technotes-kd2z.onrender.com/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className={styles.projectTitleLink} // Optional: Add custom styling
+              >
+           
+              <h3>Technotes project <span className={styles.externalIcon}>↗</span></h3>
+              </a>
               <p>A MernStack application built with a backend API&apos;s.</p>
               <div className={styles.techStack}>
                 <span>MongoDB</span>
@@ -277,11 +299,24 @@ export default function Home() {
                 <span>reduxJs</span>
                 <span>Jwt-decode</span>
               </div>
-              <a href="https://github.com/Dhia7/technotes" target="_blank" rel="noopener noreferrer" className={styles.projectLink}>View Project</a>
+              <a  href="https://github.com/Dhia7/technotes" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className={styles.projectLink}
+                  >
+                    View Project <FontAwesomeIcon icon={faExternalLinkAlt} className={styles.linkIcon} />
+                    </a>
             </div>
 
             <div className={styles.projectCard}>
-              <h3>Portfolio Website</h3>
+              <a
+                  href="https://cv-website-nine-chi.vercel.app/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className={styles.projectTitleLink} // Optional: Add custom styling
+              >
+              <h3>Portfolio Website <span className={styles.externalIcon}>↗</span></h3>
+              </a>
               <p>A personal portfolio website built with Next.js and Tailwind CSS.</p>
               <div className={styles.techStack}>
                 <span>Next.js</span>
@@ -289,7 +324,13 @@ export default function Home() {
                 <span>Typescript</span>
                 <span>Tailwind CSS</span>
               </div>
-              <a href="https://github.com/Dhia7/cv-website" target="_blank" rel="noopener noreferrer" className={styles.projectLink}>View Project</a>
+              <a href="https://github.com/Dhia7/cv-website" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className={styles.projectLink}
+              >
+                View Project <FontAwesomeIcon icon={faExternalLinkAlt} className={styles.linkIcon} />
+                </a>
             </div>
           </div>
         </section>
