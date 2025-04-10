@@ -145,7 +145,7 @@ export default function Home() {
 
       <nav className={styles.nav}>
         <ul className={styles.navList}>
-          {['about', 'experiences', 'projects', 'certifications', 'skills', 'education', 'contact'].map((section) => (
+          {['about', 'experiences', 'projects', 'certifications', 'skills', 'education'].map((section) => (
             <li key={section} className={styles.navItem}>
               <button
                 onClick={(e) => handleNavClick(section, e)}
