@@ -3,18 +3,28 @@
   --primary-color: #2ecc71;
   --dark-bg: #2c3e50;
   --light-text: #ecf0f1;
+  --section-bg: #f8f9fa;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html {
   scroll-behavior: smooth;
+  font-size: 16px;
 }
 
 body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
   background-color: var(--dark-bg);
   color: var(--light-text);
+  overflow-x: hidden;
 }
 
 
@@ -26,14 +36,6 @@ section {
 }
 
 
-.container {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 0;
-  overflow-x: hidden;
-  font-size: 16px;
-  line-height: 1.6;
-}
 
 
 

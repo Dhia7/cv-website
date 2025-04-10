@@ -9,7 +9,7 @@ import {
   faAddressCard, 
   faGraduationCap,
   faCode,
-  faLanguage,
+  faEnvelope,
   faBriefcase,
   faProjectDiagram,
   faLink,
@@ -393,8 +393,7 @@ export default function Home() {
                 <li>Node.js</li>
                 <li>MongoDB</li>
                 <li>REST APIs</li>
-                <li>PostgreSQL</li>       
-                <li></li>
+                <li>PostgreSQL</li>
               </ul>
             </div>
           </div>
@@ -424,8 +423,8 @@ export default function Home() {
               <a href="https://https://github.com/Dhia7.com/johndoe">github.com/dhianaija</a>
             </div>
             <div className={styles.contactItem}>
-              <FontAwesomeIcon icon={faLanguage} />
-              <span>Arabic (Native), English (Fluent), French (Fluent)</span>
+              <FontAwesomeIcon icon={faEnvelope} />
+              <a href='#'>dhianaija@gmail.com</a>
             </div>
           </div>
         </section>
