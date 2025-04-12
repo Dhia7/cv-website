@@ -1,5 +1,7 @@
 /* styles/Home.module.css */
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 .container {
   max-width: 100%;
   margin: 0 auto;
@@ -9,6 +11,7 @@
   line-height: 1.6;
     min-height: 100vh;
   display: flex;
+  font-family: 'Poppins', sans-serif;
   flex-direction: column;
 }
 
@@ -68,8 +71,8 @@
 
 .navList {
   display: flex; 
-  justify-content: center;
-  gap: 0rem;
+  justify-content: center; /* Distribute items evenly */
+  gap: 0.5rem;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -91,7 +94,7 @@
   color: var(--light-text);
   text-decoration: none;
   font-weight: 500;
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem 0.5rem;
   border-radius: 4px;
   display: flex;
   flex-direction: column;
@@ -123,6 +126,21 @@
   background-color: #4ae257;
   transition: width 0.3s ease;
 }
+
+/* Responsive adjustments for nav */
+@media (max-width: 768px) {
+  .navContainer {
+    width: 100%;
+    padding: 0 10px; /* Reduce padding */
+  }
+
+  .navList {
+    justify-content: space-between; /* Distribute items evenly */
+    width: 100%;
+    padding: 0;
+  }
+}
+
 
 .navLink.active .navIndicator {
   width: 100%;
@@ -340,41 +358,46 @@
 
 /* Projects Section Styles */
 .projectsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
   margin-top: 1.5rem;
 }
 
 .projectCard {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.07); /* Slightly brighter */
+    border-radius: 12px; /* More rounded */
+    padding: 2rem; /* Increased padding */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smoother transition */
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .projectCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-8px); /* More pronounced lift */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); /* Deeper shadow */
 }
 
 .projectCard h3 {
-  font-size: 1.25rem;
-  margin-bottom: 0.75rem;
-  color: var(--primary-color);
+    font-size: 1.5rem; /* Larger title */
+    margin-bottom: 1rem; /* Increased spacing */
+    color: var(--primary-color); /* Consistent use of primary color */
+    font-weight: 600; /* Bolder font */
 }
 
 .projectCard p {
-  font-size: 0.95rem;
-  margin-bottom: 1;
+    font-size: 1rem; /* Slightly larger text */
+    line-height: 1.6;
+    color: #ccc; /* Softer text color */
+    margin-bottom: 1.5rem; /* More spacing */
 }
 
 .projectTechStack {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 1rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .projectTechStack span {
@@ -384,12 +407,12 @@
   font-size: 0.8rem;
   color: #2c3e50;
 }
-
 /* Project Title Link Styling */
 .projectTitleLink {
-  text-decoration: none;
-  color: inherit; /* Keeps the original heading color */
-  display: inline-flex;
+    text-decoration: none;
+    color: inherit; /* Keeps the original heading color */
+    display: inline-flex;
+    width: 100%;
   align-items: center;
   gap: 0.5rem;
   transition: color 0.3s ease;
@@ -416,23 +439,26 @@
 
 /* Project Link Styling */
 .projectLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 6.6rem;
-  background: var(--primary-color);
-  color: var(--dark-bg);
-  border-radius: 4px;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-  margin-top: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem; /* Larger button */
+    background: var(--primary-color);
+    color: #1a252f;
+    border-radius: 8px; /* Rounded corners */
+    text-decoration: none;
+    font-weight: 600; /* Bolder text */
+    font-size: 1rem; /* Slightly larger */
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .projectLink:hover {
-  background: #27ae60;
-  transform: translateY(-2px);
+    background: #27ae60;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
 }
 
 
@@ -549,7 +575,7 @@
   
   .projectsGrid, .skillsGrid {
     grid-template-columns: repeat(2, 1fr);
-  }
+}
 }
 
 @media (min-width: 768px) {
@@ -577,6 +603,10 @@
   
   .contactGrid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .projectsGrid {
+    grid-template-columns: repeat(2, 1fr); /* Adjust for medium screens */
   }
 }
 

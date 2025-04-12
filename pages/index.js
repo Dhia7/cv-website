@@ -171,6 +171,7 @@ export default function Home() {
         <span className={styles.tagline}>Full Stack Developer</span>
       </div>
       <div className={styles.heroHighlight}>
+        <p>4+ years building scalable applications</p>
         <p>Specializing in modern web development with React, Node.js, and Next.js</p>
         <div className={styles.techStack}>
           <span className={styles.techPill}>JavaScript</span>
@@ -197,7 +198,7 @@ export default function Home() {
             </p>
             <ul className={styles.keyAchievements}>
               <li>Experienced Full Stack Developer proficient in maintaining and building applications using the MERN stack and Next.js.</li>
-              <li>Expertise in creating Next.js-based projects, including ecommerce platforms and dashboards, with a focus on performance and user experience</li>
+              <li>Expertise in creating Next.js-based projects with a focus on performance and user experience</li>
               <li>Experienced in designing, developing, and maintaining scalable web applications with robust backend APIs</li>
             </ul>
           </div>
@@ -209,7 +210,7 @@ export default function Home() {
             <div className={styles.timelineItem}>
               <h3>Web application internship</h3>
               <div className={styles.timelineDetails}>
-                <span>Februray 2023 - july 2023</span>
+                <span>September 2021 - july 2023</span>
                 <span>Sousse, TN</span>
               </div>
               <ul className={styles.responsibilities}>
@@ -381,9 +382,9 @@ export default function Home() {
               <h3>Frontend</h3>
               <ul className={styles.skillList}>
                 <li>React/Redux</li>
-                <li>TypeScript</li>
-                <li>Next.js</li>
-                <li>TailwindCSS</li>
+                <li>Tailwind CSS / CSS Modules</li>
+                <li>Jest / Vitest</li>
+                <li>Webpack / Vite</li>      
               </ul>
             </div>
 
@@ -392,8 +393,8 @@ export default function Home() {
               <ul className={styles.skillList}>
                 <li>Node.js</li>
                 <li>MongoDB</li>
-                <li>REST APIs</li>
                 <li>PostgreSQL</li>
+                <li>REST APIs</li>         
               </ul>
             </div>
           </div>
