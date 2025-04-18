@@ -207,28 +207,8 @@ export default function Home() {
         <section id="experiences" className={styles.section}>
           <h2 className={styles.sectionTitle}><FontAwesomeIcon icon={faBriefcase} /> Work Experiences</h2>
           <div className={styles.timeline}>
-            <div className={styles.timelineItem}>
-              <h3>Web application internship</h3>
-              <div className={styles.timelineDetails}>
-                <span>September 2021 - july 2023</span>
-                <span>Sousse, TN</span>
-              </div>
-              <ul className={styles.responsibilities}>
-              <li><div>
-                  <strong>Needs Analysis:</strong> Collaborated with stakeholders to gather and analyze project requirements, defining the site&apos;s key features.
-                  </div>
-                </li>
-                <li>
-                  <strong>Design and Development:</strong> Designed the site&apos;s architecture and developed functionalities using modern technologies, creating an intuitive and responsive user interface and implementing a database for dynamic content management.
-                </li>
-                <li>
-                  <strong>Testing and Optimization:</strong> Conducted rigorous testing to ensure quality and performance, optimizing code for faster loading speeds and an enhanced user experience.
-                </li>
-                <li>
-                  <strong>Deployment:</strong> Supervised the site&apos;s deployment, ensuring it was fully functional, accessible, and ready for end users.
-                </li>
-              </ul>
-            </div>
+
+
 
             <div className={styles.timelineItem}>
               <h3>Full Stack Developer - Freelancer</h3>
@@ -250,7 +230,34 @@ export default function Home() {
                 </li>
               </ul>
             </div>
+
+            <div className={styles.timelineItem}>
+              <h3>Web application internship</h3>
+              <span>GPRO Consulting</span>
+              <div className={styles.timelineDetails}>
+                <span>Februray 2023 - july 2023</span>
+                <span>Sousse, TN</span>
+              </div>
+              <ul className={styles.responsibilities}>
+              <li><div>
+                  <strong>Needs Analysis:</strong> Collaborated with stakeholders to gather and analyze project requirements, defining the site&apos;s key features.
+                  </div>
+                </li>
+                <li>
+                  <strong>Design and Development:</strong> Designed the site&apos;s architecture and developed functionalities using modern technologies, creating an intuitive and responsive user interface and implementing a database for dynamic content management.
+                </li>
+                <li>
+                  <strong>Testing and Optimization:</strong> Conducted rigorous testing to ensure quality and performance, optimizing code for faster loading speeds and an enhanced user experience.
+                </li>
+                <li>
+                  <strong>Deployment:</strong> Supervised the site&apos;s deployment, ensuring it was fully functional, accessible, and ready for end users.
+                </li>
+              </ul>
+            </div> 
+  
           </div>
+
+          
         </section>
 
         <section id="projects" className={styles.section}>
@@ -381,10 +388,10 @@ export default function Home() {
             <div className={styles.skillCategory}>
               <h3>Frontend</h3>
               <ul className={styles.skillList}>
+                <li>Javascript(ES6+)</li>
                 <li>React/Redux</li>
-                <li>Tailwind CSS / CSS Modules</li>
-                <li>Jest / Vitest</li>
-                <li>Webpack / Vite</li>      
+                <li>TypeScript</li>
+                <li>Tailwind CSS/CSS Modules</li>    
               </ul>
             </div>
 
@@ -395,6 +402,16 @@ export default function Home() {
                 <li>MongoDB</li>
                 <li>PostgreSQL</li>
                 <li>REST APIs</li>         
+              </ul>
+            </div>
+
+            <div className={styles.skillCategory}>
+              <h3>Tools & Others</h3>
+              <ul className={styles.skillList}>
+                <li>Git/Github</li>
+                <li>Webpack/Vite</li>
+                <li>Jest(Testing)</li>
+                <li>Shopify/Wordpress</li>         
               </ul>
             </div>
           </div>
