@@ -145,7 +145,7 @@ export default function Home() {
 
       <nav className={styles.nav}>
         <ul className={styles.navList}>
-          {['about', 'experiences', 'projects', 'certifications', 'skills', 'education'].map((section) => (
+          {['about','experiences', 'projects', 'certifications', 'skills', 'education'].map((section) => (
             <li key={section} className={styles.navItem}>
               <button
                 onClick={(e) => handleNavClick(section, e)}
@@ -171,7 +171,6 @@ export default function Home() {
         <span className={styles.tagline}>Full Stack Developer</span>
       </div>
       <div className={styles.heroHighlight}>
-        <p>4+ years building scalable applications</p>
         <p>Specializing in modern web development with React, Node.js, and Next.js</p>
         <div className={styles.techStack}>
           <span className={styles.techPill}>JavaScript</span>
@@ -198,7 +197,7 @@ export default function Home() {
             </p>
             <ul className={styles.keyAchievements}>
               <li>Experienced Full Stack Developer proficient in maintaining and building applications using the MERN stack and Next.js.</li>
-              <li>Expertise in creating Next.js-based projects with a focus on performance and user experience</li>
+              <li>Expertise in creating Next.js-based projects, including ecommerce platforms and dashboards, with a focus on performance and user experience</li>
               <li>Experienced in designing, developing, and maintaining scalable web applications with robust backend APIs</li>
             </ul>
           </div>
@@ -207,8 +206,28 @@ export default function Home() {
         <section id="experiences" className={styles.section}>
           <h2 className={styles.sectionTitle}><FontAwesomeIcon icon={faBriefcase} /> Work Experiences</h2>
           <div className={styles.timeline}>
-
-
+            <div className={styles.timelineItem}>
+              <h3>Web application internship</h3>
+              <div className={styles.timelineDetails}>
+                <span>Februray 2023 - july 2023</span>
+                <span>Sousse, TN</span>
+              </div>
+              <ul className={styles.responsibilities}>
+              <li><div>
+                  <strong>Needs Analysis:</strong> Collaborated with stakeholders to gather and analyze project requirements, defining the site&apos;s key features.
+                  </div>
+                </li>
+                <li>
+                  <strong>Design and Development:</strong> Designed the site&apos;s architecture and developed functionalities using modern technologies, creating an intuitive and responsive user interface and implementing a database for dynamic content management.
+                </li>
+                <li>
+                  <strong>Testing and Optimization:</strong> Conducted rigorous testing to ensure quality and performance, optimizing code for faster loading speeds and an enhanced user experience.
+                </li>
+                <li>
+                  <strong>Deployment:</strong> Supervised the site&apos;s deployment, ensuring it was fully functional, accessible, and ready for end users.
+                </li>
+              </ul>
+            </div>
 
             <div className={styles.timelineItem}>
               <h3>Full Stack Developer - Freelancer</h3>
@@ -230,34 +249,7 @@ export default function Home() {
                 </li>
               </ul>
             </div>
-
-            <div className={styles.timelineItem}>
-              <h3>Web application internship</h3>
-              <span>GPRO Consulting</span>
-              <div className={styles.timelineDetails}>
-                <span>Februray 2023 - july 2023</span>
-                <span>Sousse, TN</span>
-              </div>
-              <ul className={styles.responsibilities}>
-              <li><div>
-                  <strong>Needs Analysis:</strong> Collaborated with stakeholders to gather and analyze project requirements, defining the site&apos;s key features.
-                  </div>
-                </li>
-                <li>
-                  <strong>Design and Development:</strong> Designed the site&apos;s architecture and developed functionalities using modern technologies, creating an intuitive and responsive user interface and implementing a database for dynamic content management.
-                </li>
-                <li>
-                  <strong>Testing and Optimization:</strong> Conducted rigorous testing to ensure quality and performance, optimizing code for faster loading speeds and an enhanced user experience.
-                </li>
-                <li>
-                  <strong>Deployment:</strong> Supervised the site&apos;s deployment, ensuring it was fully functional, accessible, and ready for end users.
-                </li>
-              </ul>
-            </div> 
-  
           </div>
-
-          
         </section>
 
         <section id="projects" className={styles.section}>
@@ -298,7 +290,7 @@ export default function Home() {
            
               <h3>Technotes project <span className={styles.externalIcon}>↗</span></h3>
               </a>
-              <p>A MernStack application built with a backend API&apos;s.</p>
+              <p>A MernStack application focused on backend API&apos;s.</p>
               <div className={styles.techStack}>
                 <span>MongoDB</span>
                 <span>Express</span>
@@ -318,21 +310,22 @@ export default function Home() {
 
             <div className={styles.projectCard}>
               <a
-                  href="https://cv-website-nine-chi.vercel.app/" 
+                  href="https://weary-iota.vercel.app/" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className={styles.projectTitleLink} // Optional: Add custom styling
               >
-              <h3>Portfolio Website <span className={styles.externalIcon}>↗</span></h3>
+              <h3>Ecommerce Website<span className={styles.externalIcon}>↗</span></h3>
               </a>
-              <p>A personal portfolio website built with Next.js and Tailwind CSS.</p>
+              <p>A eCommerce website built with Next.js and other technologies.</p>
               <div className={styles.techStack}>
                 <span>Next.js</span>
                 <span>React</span>
                 <span>Typescript</span>
                 <span>Tailwind CSS</span>
+                <span>Vercel/postgres</span>
               </div>
-              <a href="https://github.com/Dhia7/cv-website" 
+              <a href="https://github.com/Dhia7/weary" 
               target="_blank" 
               rel="noopener noreferrer" 
               className={styles.projectLink}
@@ -388,10 +381,10 @@ export default function Home() {
             <div className={styles.skillCategory}>
               <h3>Frontend</h3>
               <ul className={styles.skillList}>
-                <li>Javascript(ES6+)</li>
                 <li>React/Redux</li>
                 <li>TypeScript</li>
-                <li>Tailwind CSS/CSS Modules</li>    
+                <li>Next.js</li>
+                <li>TailwindCSS</li>
               </ul>
             </div>
 
@@ -400,18 +393,8 @@ export default function Home() {
               <ul className={styles.skillList}>
                 <li>Node.js</li>
                 <li>MongoDB</li>
+                <li>REST APIs</li>
                 <li>PostgreSQL</li>
-                <li>REST APIs</li>         
-              </ul>
-            </div>
-
-            <div className={styles.skillCategory}>
-              <h3>Tools & Others</h3>
-              <ul className={styles.skillList}>
-                <li>Git/Github</li>
-                <li>Webpack/Vite</li>
-                <li>Jest(Testing)</li>
-                <li>Shopify/Wordpress</li>         
               </ul>
             </div>
           </div>
