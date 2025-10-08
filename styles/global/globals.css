@@ -1,0 +1,68 @@
+/* styles/globals.css */
+:root {
+  --primary-color: #2ecc71;
+  --dark-bg: #2c3e50;
+  --light-text: #ecf0f1;
+  --section-bg: #f8f9fa;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  background-color: var(--dark-bg);
+  color: var(--light-text);
+  overflow-x: hidden;
+}
+
+
+
+section {
+  scroll-margin-top: 100px; /* Should match your header height */
+  transition: all 0.3s ease;
+  
+}
+
+
+
+
+
+@media (max-width: 768px) {
+  .navList {
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding: 0.5rem 1rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .navItem {
+    flex-shrink: 0;
+  }
+  
+  .navLink {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .scrollProgressBar {
+    transition: none !important;
+  }
+}
+
