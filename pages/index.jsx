@@ -1,6 +1,6 @@
 // pages/index.js
-import { useScroll } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { motion, useScroll, useSpring } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFreeCodeCamp } from '@fortawesome/free-brands-svg-icons';
@@ -17,104 +17,146 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import styles from '../styles/Home.module.css';
+import AnimatedSection from '../components/AnimatedSection';
+import TypingEffect from '../components/TypingEffect';
+import ThemeToggle from '../components/ThemeToggle';
 
 
 export default function Home() {
-  const { scrollY } = useScroll();
+  const navigationSections = [
+    { id: 'about', label: 'About' },
+    { id: 'experiences', label: 'Experiences' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'certifications', label: 'Certifications' },
+    { id: 'skills', label: 'Skills' }
+  ];
   const [activeSection, setActiveSection] = useState('about');
-  const [scrollProgress, setScrollProgress] = useState(0);
-
-  
+  const [isVisible, setIsVisible] = useState(false);
+  const isNavigatingRef = useRef(false);
 
   useEffect(() => {
+    setIsVisible(true);
+    
     const handleScroll = () => {
-      return scrollY.onChange((latest) => {
-      // Your scroll handling logic here
-      // latest will be a value between 0 and 1
-      const scrollPosition = latest * document.body.scrollHeight;
-      // Scroll progress calculation
-      const scrollTop = latest;
+      // Don't update section during manual navigation
+      if (isNavigatingRef.current) {
+        return;
+      }
+      
+      const scrollPosition = window.scrollY;
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
-      const totalScroll = documentHeight - windowHeight;
-      const progress = (scrollTop / totalScroll) * 100;
-      setScrollProgress(progress);
+      const heroSection = document.querySelector('header');
+      const heroHeight = heroSection ? heroSection.offsetHeight : 0;
       
-  
       // Active section detection
-      const sections = document.querySelectorAll(`.${styles.section}`);
-      let currentSection = '';
+      let currentSection = 'about'; // Default to about (hero)
       
-      sections.forEach(section => {
-        const sectionId = section.getAttribute('id');
-        const sectionOffsetTop = section.offsetTop;
-        const sectionHeight = section.offsetHeight;
+      // Priority 1: Check if we're at the bottom of the page - keep last section (skills) active
+      const isAtBottom = scrollPosition + windowHeight >= documentHeight - 50;
+      
+      if (isAtBottom) {
+        currentSection = 'skills';
+      } else {
+        // Priority 2: Check if we're in the hero/summary section (About)
+        const summarySection = document.getElementById('summary');
+        const summaryEnd = summarySection ? summarySection.offsetTop + summarySection.offsetHeight : heroHeight;
         
-        if (
-          scrollPosition  >= sectionOffsetTop - 150 && // 100px offset for early detection
-          scrollPosition  < sectionOffsetTop + sectionHeight - windowHeight / 3
-        ) {
-          currentSection = sectionId;
+        if (scrollPosition + 100 < summaryEnd) {
+          currentSection = 'about';
+        } else {
+          // Priority 3: Check which section is most visible in the viewport
+          const navSectionIds = ['experiences', 'projects', 'certifications', 'skills'];
+          let maxVisibleArea = 0;
+          let mostVisibleSection = 'experiences';
+          
+          for (const sectionId of navSectionIds) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+              const rect = section.getBoundingClientRect();
+              const sectionTop = rect.top;
+              const sectionBottom = rect.bottom;
+              const navbarHeight = 80;
+              
+              // Calculate visible area of this section in viewport
+              const visibleTop = Math.max(sectionTop, navbarHeight);
+              const visibleBottom = Math.min(sectionBottom, windowHeight);
+              const visibleArea = Math.max(0, visibleBottom - visibleTop);
+              
+              // The section with the most visible area is the active one
+              if (visibleArea > maxVisibleArea) {
+                maxVisibleArea = visibleArea;
+                mostVisibleSection = sectionId;
+              }
+            }
+          }
+          
+          currentSection = mostVisibleSection;
         }
-        
-      });
+      }
       
-      if (currentSection && currentSection !== activeSection) {
+      if (currentSection !== activeSection) {
         setActiveSection(currentSection);
       }
-    });
     };
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial call
     
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [activeSection, scrollY]);
-  
-  
-  // Keep your IntersectionObserver for animations only
-  useEffect(() => {
-    const sections = document.querySelectorAll(`.${styles.section}`);
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add(styles.inView);
-          }
-        });
-      },
-      {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
+    // Debounce scroll for smoother performance
+    let scrollTimeout;
+    const debouncedHandleScroll = () => {
+      if (scrollTimeout) {
+        window.cancelAnimationFrame(scrollTimeout);
       }
-    );
-  
-    sections.forEach(section => {
-      observer.observe(section);
-    });
-  
-    return () => {
-      sections.forEach(section => {
-        observer.unobserve(section);
-      });
+      scrollTimeout = window.requestAnimationFrame(handleScroll);
     };
-  }, []);
+    
+    window.addEventListener('scroll', debouncedHandleScroll, { passive: true });
+    handleScroll();
+    
+    return () => window.removeEventListener('scroll', debouncedHandleScroll);
+  }, [activeSection, navigationSections]);
 
  
     
   const handleNavClick = (sectionId, e) => {
     e.preventDefault();
+    
+    // Set flag to prevent scroll detection from interfering
+    isNavigatingRef.current = true;
+    
+    // Update active section immediately
+    setActiveSection(sectionId);
+    
+    // Special handling for "about" - scroll to top (hero section)
+    if (sectionId === 'about') {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+      
+      // Clear navigation flag after scroll completes
+      setTimeout(() => {
+        isNavigatingRef.current = false;
+      }, 1000);
+      return;
+    }
+    
     const targetSection = document.getElementById(sectionId);
     if (targetSection) {
-      const offset = 100;
+      const offset = 80; // Navbar height
       const targetPosition = targetSection.getBoundingClientRect().top + window.scrollY - offset;
       
+      // Smooth scroll
       window.scrollTo({
         top: targetPosition,
         behavior: 'smooth'
       });
-  
-      // Update active section immediately for better UX
-      setActiveSection(sectionId);
+      
+      // Clear navigation flag after scroll animation completes
+      setTimeout(() => {
+        isNavigatingRef.current = false;
+      }, 1000);
+    } else {
+      isNavigatingRef.current = false;
     }
   };
 
@@ -135,78 +177,208 @@ export default function Home() {
         <meta name="theme-color" content="#2c3e50" />
       </Head>
 
-      {/* Scroll Progress Indicator */}
-      <div className={styles.scrollProgressContainer}>
-        <div
-          className={styles.scrollProgressBar}
-          style={{ width: `${scrollProgress}%` }}
-        ></div>
-      </div>
-
-      <nav className={styles.nav}>
+      <motion.nav 
+        className={styles.nav}
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
         <ul className={styles.navList}>
-          {['about','experiences', 'projects', 'certifications', 'skills', 'education'].map((section) => (
-            <li key={section} className={styles.navItem}>
+          {navigationSections.map((section, index) => (
+            <motion.li 
+              key={section.id} 
+              className={styles.navItem}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+            >
               <button
-                onClick={(e) => handleNavClick(section, e)}
+                onClick={(e) => handleNavClick(section.id, e)}
                 className={`${styles.navLink} ${
-                  activeSection === section ? styles.active : ''
+                  activeSection === section.id ? styles.active : ''
                 }`}
               >
-                {section.charAt(0).toUpperCase() + section.slice(1)}
-                <span className={styles.navIndicator}></span>
+                {section.label}
+                {activeSection === section.id && (
+                  <motion.span 
+                    className={styles.navIndicator}
+                    layoutId="activeIndicator"
+                    initial={{ width: 0 }}
+                    animate={{ width: '100%' }}
+                    exit={{ width: 0 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                )}
               </button>
-            </li>
+            </motion.li>
           ))}
+          <motion.li
+            className={styles.navItem}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: navigationSections.length * 0.1, duration: 0.5 }}
+          >
+            <ThemeToggle />
+          </motion.li>
         </ul>
-      </nav>
+      </motion.nav>
 
-      <header className={styles.hero}>
+      <motion.header 
+        className={styles.hero}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+      >
   <div className={styles.heroContent}>
     <div className={styles.heroText}>
-      <h1 className={styles.heroTitle}>Dhia Eddine Naija</h1>
-      <div className={styles.heroSubtitle}>
+            <TypingEffect 
+              text="Dhia Eddine Naija"
+              className={styles.heroTitle}
+            />
+            <motion.div 
+              className={styles.heroSubtitle}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.6 }}
+            >
         <span className={styles.location}>📍 Sousse, Tunisia</span>
         <span className={styles.divider}>|</span>
         <span className={styles.tagline}>Full Stack Developer</span>
-      </div>
-      <div className={styles.heroHighlight}>
+            </motion.div>
+            <motion.div 
+              className={styles.heroHighlight}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1, duration: 0.6 }}
+            >
         <p>Specializing in modern web development with React, Node.js, and Next.js</p>
         <div className={styles.techStack}>
-          <span className={styles.techPill}>JavaScript</span>
-          <span className={styles.techPill}>TypeScript</span>
-          <span className={styles.techPill}>React.js</span>
-          <span className={styles.techPill}>Node.js</span>
-          <span className={styles.techPill}>Next.js</span>
+                {['JavaScript', 'TypeScript', 'React.js', 'Node.js', 'Next.js'].map((tech, index) => (
+                  <motion.span
+                    key={tech}
+                    className={styles.techPill}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 1.2 + index * 0.1, duration: 0.4 }}
+                    whileHover={{ scale: 1.1, y: -2 }}
+                  >
+                    {tech}
+                  </motion.span>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+          <motion.div 
+            className={styles.heroActions}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.4, duration: 0.6 }}
+          >
+            <motion.a 
+              href="#contact" 
+              className={styles.primaryButton}
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Contact Me
+            </motion.a>
+            <motion.a 
+              href="#projects" 
+              className={styles.secondaryButton}
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              View Projects
+            </motion.a>
+          </motion.div>
         </div>
-      </div>
-    </div>
-    <div className={styles.heroActions}>
-      <a href="#contact" className={styles.primaryButton}>Contact Me</a>
-      <a href="#projects" className={styles.secondaryButton}>View Projects</a>
-    </div>
-  </div>
-</header>
+      </motion.header>
 
       <main>
-        <section id="about" className={styles.section}>
-          <h2 className={styles.sectionTitle}><FontAwesomeIcon icon={faAddressCard} /> Summary</h2>
+        <AnimatedSection id="summary" className={styles.section}>
+          <motion.h2 
+            className={styles.sectionTitle}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <FontAwesomeIcon icon={faAddressCard} /> Summary
+          </motion.h2>
           <div className={styles.sectionContent}>
-            <p className={styles.highlightText}>
+            <motion.p 
+              className={styles.highlightText}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
               Experienced Full Stack Web Developer :
-            </p>
-            <ul className={styles.keyAchievements}>
-              <li>Experienced Full Stack Developer proficient in maintaining and building applications using the MERN stack and Next.js.</li>
-              <li>Expertise in creating Next.js-based projects, including ecommerce platforms and dashboards, with a focus on performance and user experience</li>
-              <li>Experienced in designing, developing, and maintaining scalable web applications with robust backend APIs</li>
-            </ul>
+            </motion.p>
+            <motion.ul 
+              className={styles.keyAchievements}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={{
+                visible: {
+                  transition: {
+                    staggerChildren: 0.15
+                  }
+                }
+              }}
+            >
+              {[
+                "Experienced Full Stack Developer proficient in maintaining and building applications using the MERN stack and Next.js.",
+                "Expertise in creating Next.js-based projects, including ecommerce platforms and dashboards, with a focus on performance and user experience",
+                "Experienced in designing, developing, and maintaining scalable web applications with robust backend APIs"
+              ].map((item, index) => (
+                <motion.li
+                  key={index}
+                  variants={{
+                    hidden: { opacity: 0, x: -20 },
+                    visible: { opacity: 1, x: 0 }
+                  }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {item}
+                </motion.li>
+              ))}
+            </motion.ul>
           </div>
-        </section>
+        </AnimatedSection>
 
-        <section id="experiences" className={styles.section}>
-          <h2 className={styles.sectionTitle}><FontAwesomeIcon icon={faBriefcase} /> Work Experiences</h2>
-          <div className={styles.timeline}>
-            <div className={styles.timelineItem}>
+        <AnimatedSection id="experiences" className={styles.section}>
+          <motion.h2 
+            className={styles.sectionTitle}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <FontAwesomeIcon icon={faBriefcase} /> Work Experiences
+          </motion.h2>
+          <motion.div 
+            className={styles.timeline}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={{
+              visible: {
+                transition: {
+                  staggerChildren: 0.3
+                }
+              }
+            }}
+          >
+            <motion.div 
+              className={styles.timelineItem}
+              variants={{
+                hidden: { opacity: 0, x: -50 },
+                visible: { opacity: 1, x: 0 }
+              }}
+              transition={{ duration: 0.6 }}
+            >
               <h3>Web application internship</h3>
               <div className={styles.timelineDetails}>
                 <span>Februray 2023 - july 2023</span>
@@ -227,9 +399,16 @@ export default function Home() {
                   <strong>Deployment:</strong> Supervised the site&apos;s deployment, ensuring it was fully functional, accessible, and ready for end users.
                 </li>
               </ul>
-            </div>
+            </motion.div>
 
-            <div className={styles.timelineItem}>
+            <motion.div 
+              className={styles.timelineItem}
+              variants={{
+                hidden: { opacity: 0, x: -50 },
+                visible: { opacity: 1, x: 0 }
+              }}
+              transition={{ duration: 0.6 }}
+            >
               <h3>Full Stack Developer - Freelancer</h3>
               <div className={styles.timelineDetails}>
                 <span>2024 - Present</span>
@@ -248,98 +427,132 @@ export default function Home() {
                   Optimized application performance through rigorous testing, code refinement, and efficient deployment strategies.
                 </li>
               </ul>
-            </div>
-          </div>
-        </section>
+            </motion.div>
+          </motion.div>
+        </AnimatedSection>
 
-        <section id="projects" className={styles.section}>
-          <h2 className={styles.sectionTitle}><FontAwesomeIcon icon={faProjectDiagram} /> Projects</h2>
-          <div className={styles.projectsGrid}>
-            <div className={styles.projectCard}>
-              <a
-                  href="https://nextjs-dashboard-projects.vercel.app/" 
+        <AnimatedSection id="projects" className={styles.section}>
+          <motion.h2 
+            className={styles.sectionTitle}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <FontAwesomeIcon icon={faProjectDiagram} /> Projects
+          </motion.h2>
+          <motion.div 
+            className={styles.projectsGrid}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={{
+              visible: {
+                transition: {
+                  staggerChildren: 0.2
+                }
+              }
+            }}
+          >
+            {[
+              {
+                title: "Dashboard Platform",
+                url: "https://nextjs-dashboard-projects.vercel.app/",
+                description: "A full-stack Dashboard solution built with Next.js",
+                tech: ["React", "Typescript", "Tailwind CSS", "Vercel/postgres"],
+                github: "https://github.com/Dhia7/nextjs-dashboard"
+              },
+              {
+                title: "Technotes project",
+                url: "https://technotes-kd2z.onrender.com/",
+                description: "A MernStack application focused on backend API's.",
+                tech: ["MongoDB", "Express", "React", "Node.js", "reduxJs", "Jwt-decode"],
+                github: "https://github.com/Dhia7/technotes"
+              },
+              {
+                title: "Ecommerce Website",
+                url: "https://weary-iota.vercel.app/",
+                description: "A eCommerce website built with Next.js and other technologies.",
+                tech: ["Next.js", "React", "Typescript", "Tailwind CSS", "Vercel/postgres"],
+                github: "https://github.com/Dhia7/weary"
+              }
+            ].map((project, index) => (
+              <motion.div 
+                key={index}
+                className={styles.projectCard}
+                variants={{
+                  hidden: { opacity: 0, y: 50 },
+                  visible: { opacity: 1, y: 0 }
+                }}
+                transition={{ duration: 0.6 }}
+                whileHover={{ y: -10, transition: { duration: 0.3 } }}
+              >
+                <a
+                  href={project.url}
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className={styles.projectTitleLink} // Optional: Add custom styling
+                  className={styles.projectTitleLink}
               >
-                <h3>Dashboard Platform <span className={styles.externalIcon}>↗</span></h3>
+                  <h3>{project.title} <span className={styles.externalIcon}>↗</span></h3>
               </a>
-              <p>A full-stack Dashboard solution built with Next.js</p>
+                <p>{project.description}</p>
               <div className={styles.techStack}>
-                <span>React</span>
-                <span>Typescript</span>
-                <span>Tailwind CSS</span>
-                <span>Vercel/postgres</span>
+                  {project.tech.map((tech, i) => (
+                    <motion.span
+                      key={i}
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {tech}
+                    </motion.span>
+                  ))}
               </div>
-                <a  href="https://github.com/Dhia7/nextjs-dashboard"
+                <motion.a  
+                  href={project.github}
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className={styles.projectLink}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   >
                     View Project <FontAwesomeIcon icon={faExternalLinkAlt} className={styles.linkIcon} />
-                </a>
-              </div>
+                </motion.a>
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatedSection>
 
-            <div className={styles.projectCard}>
-              <a
-                  href="https://technotes-kd2z.onrender.com/" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className={styles.projectTitleLink} // Optional: Add custom styling
-              >
-           
-              <h3>Technotes project <span className={styles.externalIcon}>↗</span></h3>
-              </a>
-              <p>A MernStack application focused on backend API&apos;s.</p>
-              <div className={styles.techStack}>
-                <span>MongoDB</span>
-                <span>Express</span>
-                <span>React</span>
-                <span>Node.js</span>
-                <span>reduxJs</span>
-                <span>Jwt-decode</span>
-              </div>
-              <a  href="https://github.com/Dhia7/technotes" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className={styles.projectLink}
-                  >
-                    View Project <FontAwesomeIcon icon={faExternalLinkAlt} className={styles.linkIcon} />
-                    </a>
-            </div>
-
-            <div className={styles.projectCard}>
-              <a
-                  href="https://weary-iota.vercel.app/" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className={styles.projectTitleLink} // Optional: Add custom styling
-              >
-              <h3>Ecommerce Website<span className={styles.externalIcon}>↗</span></h3>
-              </a>
-              <p>A eCommerce website built with Next.js and other technologies.</p>
-              <div className={styles.techStack}>
-                <span>Next.js</span>
-                <span>React</span>
-                <span>Typescript</span>
-                <span>Tailwind CSS</span>
-                <span>Vercel/postgres</span>
-              </div>
-              <a href="https://github.com/Dhia7/weary" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className={styles.projectLink}
-              >
-                View Project <FontAwesomeIcon icon={faExternalLinkAlt} className={styles.linkIcon} />
-                </a>
-            </div>
-          </div>
-        </section>
-
-        <section id="certifications" className={styles.section}>
-          <h2 className={styles.sectionTitle}><FontAwesomeIcon icon={faCertificate} /> Certifications</h2>
-          <div className={styles.timeline}>
-            <div className={styles.timelineItem}>
+        <AnimatedSection id="certifications" className={styles.section}>
+          <motion.h2 
+            className={styles.sectionTitle}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <FontAwesomeIcon icon={faCertificate} /> Certifications
+          </motion.h2>
+          <motion.div 
+            className={styles.timeline}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={{
+              visible: {
+                transition: {
+                  staggerChildren: 0.3
+                }
+              }
+            }}
+          >
+            <motion.div 
+              className={styles.timelineItem}
+              variants={{
+                hidden: { opacity: 0, x: -50 },
+                visible: { opacity: 1, x: 0 }
+              }}
+              transition={{ duration: 0.6 }}
+            >
               <h3 style={{ display: 'flex', alignItems: 'center' }}> <FontAwesomeIcon icon={faFreeCodeCamp}/>_BackEnd Development and APIs</h3>
               <div className={styles.timelineDetails}>
                 <span>Februray 14 - 2025</span>|
@@ -351,9 +564,16 @@ export default function Home() {
                 <li>MongoDB and Mongoose</li>
                 <li>Back End Development and APIs Projects</li>
               </ul>
-            </div>
+            </motion.div>
 
-            <div className={styles.timelineItem}>
+            <motion.div 
+              className={styles.timelineItem}
+              variants={{
+                hidden: { opacity: 0, x: -50 },
+                visible: { opacity: 1, x: 0 }
+              }}
+              transition={{ duration: 0.6 }}
+            >
               <h3 style={{ display: 'flex', alignItems: 'center' }}><FontAwesomeIcon icon={faFreeCodeCamp} />_Legacy Javascript Algorithms and Data Structures</h3>
               <div className={styles.timelineDetails}>
                 <span>December 10 - 2024</span>|
@@ -371,64 +591,150 @@ export default function Home() {
                 <li>Intermediate Algorithm Scripting</li>
                 <li>JavaScript Algorithms and Data Structures Projects</li>
               </ul>
-            </div>
-          </div>
-        </section>
+            </motion.div>
+          </motion.div>
+        </AnimatedSection>
 
-        <section id="skills" className={styles.section}>
-          <h2 className={styles.sectionTitle}><FontAwesomeIcon icon={faCode} /> Technical Skills</h2>
-          <div className={styles.skillsGrid}>
-            <div className={styles.skillCategory}>
-              <h3>Frontend</h3>
-              <ul className={styles.skillList}>
-                <li>React/Redux</li>
-                <li>TypeScript</li>
-                <li>Next.js</li>
-                <li>TailwindCSS</li>
-              </ul>
-            </div>
+        <AnimatedSection id="skills" className={styles.section}>
+          <motion.h2 
+            className={styles.sectionTitle}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <FontAwesomeIcon icon={faCode} /> Technical Skills
+          </motion.h2>
+          <motion.div 
+            className={styles.skillsGrid}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={{
+              visible: {
+                transition: {
+                  staggerChildren: 0.2
+                }
+              }
+            }}
+          >
+            {[
+              { title: "Frontend", skills: ["React/Redux", "TypeScript", "Next.js", "TailwindCSS"] },
+              { title: "Backend", skills: ["Node.js", "MongoDB", "REST APIs", "PostgreSQL"] }
+            ].map((category, index) => (
+              <motion.div 
+                key={index}
+                className={styles.skillCategory}
+                variants={{
+                  hidden: { opacity: 0, scale: 0.9 },
+                  visible: { opacity: 1, scale: 1 }
+                }}
+                transition={{ duration: 0.5 }}
+                whileHover={{ scale: 1.03, transition: { duration: 0.2 } }}
+              >
+                <h3>{category.title}</h3>
+                <motion.ul 
+                  className={styles.skillList}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={{
+                    visible: {
+                      transition: {
+                        staggerChildren: 0.1
+                      }
+                    }
+                  }}
+                >
+                  {category.skills.map((skill, i) => (
+                    <motion.li
+                      key={i}
+                      variants={{
+                        hidden: { opacity: 0, x: -20 },
+                        visible: { opacity: 1, x: 0 }
+                      }}
+                      transition={{ duration: 0.4 }}
+                    >
+                      {skill}
+                    </motion.li>
+                  ))}
+                </motion.ul>
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatedSection>
 
-            <div className={styles.skillCategory}>
-              <h3>Backend</h3>
-              <ul className={styles.skillList}>
-                <li>Node.js</li>
-                <li>MongoDB</li>
-                <li>REST APIs</li>
-                <li>PostgreSQL</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <section id="education" className={styles.section}>
-          <h2 className={styles.sectionTitle}><FontAwesomeIcon icon={faGraduationCap} /> Education</h2>
-          <div className={styles.educationItem}>
+        <AnimatedSection id="education" className={styles.section}>
+          <motion.h2 
+            className={styles.sectionTitle}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <FontAwesomeIcon icon={faGraduationCap} /> Education
+          </motion.h2>
+          <motion.div 
+            className={styles.educationItem}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+          >
             <h3>Business Intelligence</h3>
             <div className={styles.educationDetails}>
               <span>Polytechnic Sousse University </span>
               <span>2021 - 2023</span>
             </div>
             <p>Relevant Coursework: Advanced Algorithms, Web Application Development, Data Analysis, Machine Learning and Deep Learning</p>
-          </div>
-        </section>
+          </motion.div>
+        </AnimatedSection>
 
-        <section id="contact" className={styles.section}>
-          <h2 className={styles.sectionTitle}> <FontAwesomeIcon icon={faLink}/> Contact</h2>
-          <div className={styles.contactGrid}>
-            <div className={styles.contactItem}>
-              <FontAwesomeIcon icon={faLinkedin} />
-              <a href="https://www.linkedin.com/in/dhia-naija-64bb82200/">linkedin.com/in/dhianaija</a>
-            </div>
-            <div className={styles.contactItem}>
-              <FontAwesomeIcon icon={faGithub} />
-              <a href="https://https://github.com/Dhia7.com/johndoe">github.com/dhianaija</a>
-            </div>
-            <div className={styles.contactItem}>
-              <FontAwesomeIcon icon={faEnvelope} />
-              <a href='#'>dhianaija@gmail.com</a>
-            </div>
-          </div>
-        </section>
+        <AnimatedSection id="contact" className={styles.section}>
+          <motion.h2 
+            className={styles.sectionTitle}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <FontAwesomeIcon icon={faLink}/> Contact
+          </motion.h2>
+          <motion.div 
+            className={styles.contactGrid}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={{
+              visible: {
+                transition: {
+                  staggerChildren: 0.15
+                }
+              }
+            }}
+          >
+            {[
+              { icon: faLinkedin, href: "https://www.linkedin.com/in/dhia-naija-64bb82200/", text: "linkedin.com/in/dhianaija" },
+              { icon: faGithub, href: "https://https://github.com/Dhia7.com/johndoe", text: "github.com/dhianaija" },
+              { icon: faEnvelope, href: "#", text: "dhianaija@gmail.com" }
+            ].map((contact, index) => (
+              <motion.div 
+                key={index}
+                className={styles.contactItem}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 }
+                }}
+                transition={{ duration: 0.5 }}
+                whileHover={{ scale: 1.05, y: -5, transition: { duration: 0.2 } }}
+              >
+                <FontAwesomeIcon icon={contact.icon} />
+                <a href={contact.href}>{contact.text}</a>
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatedSection>
       </main>
     </div>
   );

@@ -1,0 +1,65 @@
+.themeToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--light-text);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.themeToggle:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 20px rgba(46, 204, 113, 0.3);
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  color: var(--primary-color);
+}
+
+.label {
+  font-size: 0.85rem;
+}
+
+/* Light mode specific styles */
+[data-theme='light'] .themeToggle {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: var(--dark-text);
+}
+
+[data-theme='light'] .themeToggle:hover {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .label {
+    display: none;
+  }
+  
+  .themeToggle {
+    padding: 0.6rem;
+    border-radius: 50%;
+  }
+}
+

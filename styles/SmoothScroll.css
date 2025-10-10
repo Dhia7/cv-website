@@ -1,0 +1,18 @@
+/* Enhanced smooth scrolling */
+* {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Optimize scrolling performance */
+body {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: none;
+}
+
+/* Prevent layout shift during scroll */
+main {
+  contain: layout style paint;
+}
+
