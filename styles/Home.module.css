@@ -124,8 +124,18 @@
   height: 3px;
   background: linear-gradient(90deg, var(--primary-color), #3498db);
   border-radius: 2px;
-  box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+  box-shadow: 
+    0 0 10px rgba(46, 204, 113, 0.6),
+    0 0 20px rgba(46, 204, 113, 0.3);
   width: 100%;
+}
+
+/* Light mode nav indicator */
+[data-theme='light'] .navIndicator {
+  background: linear-gradient(90deg, #27ae60, #2ecc71);
+  box-shadow: 
+    0 0 8px rgba(39, 174, 96, 0.5),
+    0 2px 8px rgba(39, 174, 96, 0.3);
 }
 
 .navLink::after {
@@ -158,7 +168,7 @@
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* Animated Orbs Background */
+/* Animated Orbs Background - Enhanced for dark mode */
 .hero::before {
   content: '';
   position: absolute;
@@ -167,14 +177,22 @@
   width: 200%;
   height: 200%;
   background: 
-    radial-gradient(circle at 30% 40%, rgba(46, 204, 113, 0.15) 0%, transparent 25%),
-    radial-gradient(circle at 70% 60%, rgba(52, 152, 219, 0.12) 0%, transparent 25%),
-    radial-gradient(circle at 50% 80%, rgba(155, 89, 182, 0.1) 0%, transparent 25%);
+    radial-gradient(circle at 30% 40%, rgba(46, 204, 113, 0.25) 0%, transparent 30%),
+    radial-gradient(circle at 70% 60%, rgba(52, 152, 219, 0.2) 0%, transparent 30%),
+    radial-gradient(circle at 50% 80%, rgba(155, 89, 182, 0.18) 0%, transparent 30%);
   animation: orbsFloat 20s ease-in-out infinite;
   z-index: 0;
 }
 
-/* Floating Particles */
+/* Light mode animated orbs - More visible */
+[data-theme='light'] .hero::before {
+  background: 
+    radial-gradient(circle at 30% 40%, rgba(39, 174, 96, 0.25) 0%, transparent 30%),
+    radial-gradient(circle at 70% 60%, rgba(41, 128, 185, 0.2) 0%, transparent 30%),
+    radial-gradient(circle at 50% 80%, rgba(142, 68, 173, 0.15) 0%, transparent 30%);
+}
+
+/* Floating Particles - Enhanced for dark mode */
 .hero::after {
   content: '';
   position: absolute;
@@ -183,13 +201,21 @@
   width: 100%;
   height: 100%;
   background-image: 
-    radial-gradient(circle, rgba(46, 204, 113, 0.4) 2px, transparent 2px),
-    radial-gradient(circle, rgba(52, 152, 219, 0.3) 1px, transparent 1px);
+    radial-gradient(circle, rgba(46, 204, 113, 0.6) 3px, transparent 3px),
+    radial-gradient(circle, rgba(52, 152, 219, 0.5) 2px, transparent 2px);
   background-size: 200px 200px, 150px 150px;
   background-position: 0 0, 50px 50px;
   animation: particlesFloat 30s linear infinite;
-  opacity: 0.3;
+  opacity: 0.5;
   z-index: 0;
+}
+
+/* Light mode floating particles - More visible */
+[data-theme='light'] .hero::after {
+  background-image: 
+    radial-gradient(circle, rgba(39, 174, 96, 0.5) 3px, transparent 3px),
+    radial-gradient(circle, rgba(41, 128, 185, 0.4) 2px, transparent 2px);
+  opacity: 0.6;
 }
 
 @keyframes orbsFloat {
@@ -587,8 +613,12 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 2px;
-  background-color: var(--primary-color);
+  width: 3px;
+  background: linear-gradient(180deg, 
+    var(--primary-color) 0%, 
+    #3498db 50%, 
+    var(--primary-color) 100%);
+  box-shadow: 0 0 10px rgba(46, 204, 113, 0.4);
 }
 
 /* Light mode timeline */
@@ -635,32 +665,46 @@
 .timelineItem::before {
   content: '';
   position: absolute;
-  left: -6px;
+  left: -8px;
   top: 8px;
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--primary-color), #3498db);
-  box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+  box-shadow: 
+    0 0 0 4px rgba(46, 204, 113, 0.2),
+    0 0 15px rgba(46, 204, 113, 0.6),
+    0 2px 8px rgba(46, 204, 113, 0.4);
   transition: all 0.3s ease;
+  border: 2px solid rgba(26, 31, 46, 0.8);
 }
 
-/* Light mode timeline dots */
+/* Light mode timeline dots - More visible */
 [data-theme='light'] .timelineItem::before {
-  box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.15);
-  width: 16px;
-  height: 16px;
-  left: -9px;
+  box-shadow: 
+    0 0 0 4px rgba(39, 174, 96, 0.25),
+    0 0 10px rgba(39, 174, 96, 0.4),
+    0 2px 8px rgba(39, 174, 96, 0.3);
+  width: 18px;
+  height: 18px;
+  left: -10px;
   background: linear-gradient(135deg, #27ae60, #2ecc71);
+  border: 2px solid #ffffff;
 }
 
 [data-theme='light'] .timelineItem:hover::before {
-  box-shadow: 0 0 0 5px rgba(39, 174, 96, 0.2);
+  box-shadow: 
+    0 0 0 6px rgba(39, 174, 96, 0.3),
+    0 0 15px rgba(39, 174, 96, 0.5),
+    0 4px 12px rgba(39, 174, 96, 0.4);
 }
 
 .timelineItem:hover::before {
   transform: scale(1.3);
-  box-shadow: 0 0 15px rgba(46, 204, 113, 0.8);
+  box-shadow: 
+    0 0 0 6px rgba(46, 204, 113, 0.3),
+    0 0 20px rgba(46, 204, 113, 0.8),
+    0 4px 12px rgba(46, 204, 113, 0.5);
 }
 
 .timelineDetails {
