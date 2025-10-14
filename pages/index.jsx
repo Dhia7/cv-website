@@ -620,7 +620,8 @@ export default function Home() {
           >
             {[
               { title: "Frontend", skills: ["React/Redux", "TypeScript", "Next.js", "TailwindCSS"] },
-              { title: "Backend", skills: ["Node.js", "MongoDB", "REST APIs", "PostgreSQL"] }
+              { title: "Backend", skills: ["Node.js", "Express.js", "REST APIs", "JWT"] },
+              { title: "Database", skills: ["MongoDB", "PostgreSQL", "Mongoose", "SQL"] }
             ].map((category, index) => (
               <motion.div 
                 key={index}

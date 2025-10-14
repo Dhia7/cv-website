@@ -53,3 +53,6 @@ export default function TypingEffect({ text, className }) {
   );
 }
 
+
+
+

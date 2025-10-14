@@ -25,3 +25,6 @@ export default function AnimatedSection({ children, id, className, delay = 0 }) 
   );
 }
 
+
+
+
